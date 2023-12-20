@@ -3,7 +3,7 @@ using SynonymsAPI.Interfaces;
 using SynonymsDB;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
+//testing
 namespace SynonymsAPI.Controllers
 {
     [Route("api/[controller]")]
