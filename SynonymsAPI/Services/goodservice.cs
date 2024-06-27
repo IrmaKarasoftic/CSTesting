@@ -20,45 +20,7 @@ namespace SynonymsAPI.Services
                 {
 
                 }
-                else if (word.Contains("B"))
-                {
-                    if (word == "BA")
-                    {
-
-                    }
-                    else if (word == "BB")
-                    {
-                        if (word == "BA")
-                        {
-
-                        }
-                        else if (word == "BB")
-                        {
-                            if (word == "BA")
-                            {
-
-                            }
-                            else if (word == "BB")
-                            {
-
-                            }
-                        }
-                    }
-                }
-                else if (word == "C")
-                {
-                    if (word == "BA")
-                    {
-
-                    }
-                    else if (word == "BB")
-                    {
-
-                    }
-                }
-                //Remove all empty strings, or synonyms that are equal to word, and get Distinct values
-
+            }
+}
     }
-}
-}
 }
