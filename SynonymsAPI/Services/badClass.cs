@@ -1797,6 +1797,72 @@ namespace Nop.Services.ExportImport
             return count;
         }
 
+public virtual int ImportNewsletterSubscribersFromTxt2(Stream stream)
+        {
+            var count = 0;
+            using (var reader = new StreamReader(stream))
+            {
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    if (string.IsNullOrWhiteSpace(line))
+                        continue;
+                    var tmp = line.Split(',');
+
+                    string email;
+                    var isActive = true;
+                    var storeId = _storeContext.CurrentStore.Id;
+                    //parse
+                    if (tmp.Length == 1)
+                    {
+                        //"email" only
+                        email = tmp[0].Trim();
+                    }
+                    else if (tmp.Length == 2)
+                    {
+                        //"email" and "active" fields specified
+                        email = tmp[0].Trim();
+                        isActive = bool.Parse(tmp[1].Trim());
+                    }
+                    else if (tmp.Length == 3)
+                    {
+                        //"email" and "active" and "storeId" fields specified
+                        email = tmp[0].Trim();
+                        isActive = bool.Parse(tmp[1].Trim());
+                        storeId = int.Parse(tmp[2].Trim());
+                    }
+                    else
+                        throw new NopException("Wrong file format");
+
+                    //import
+                    var subscription = _newsLetterSubscriptionService.GetNewsLetterSubscriptionByEmailAndStoreId(email, storeId);
+                    if (subscription != null)
+                    {
+                        subscription.Email = email;
+                        subscription.Active = isActive;
+                        _newsLetterSubscriptionService.UpdateNewsLetterSubscription(subscription);
+                    }
+                    else
+                    {
+                        subscription = new NewsLetterSubscription
+                        {
+                            Active = isActive,
+                            CreatedOnUtc = DateTime.UtcNow,
+                            Email = email,
+                            StoreId = storeId,
+                            NewsLetterSubscriptionGuid = Guid.NewGuid()
+                        };
+                        _newsLetterSubscriptionService.InsertNewsLetterSubscription(subscription);
+                    }
+
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+
         /// <summary>
         /// Import states from TXT file
         /// </summary>
